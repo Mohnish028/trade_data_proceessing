@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trade Processor</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        .upload-box { border: 2px dashed #aaa; padding: 30px; width: 400px; margin: auto; }
+        button { margin-top: 20px; background: #4CAF50; color: white; padding: 10px 20px; border: none; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Upload Trade Excel</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="upload-box">
+            <input type="file" name="file" accept=".xlsx,.xls" required><br><br>
+            <button type="submit">Upload and Process</button>
+        </div>
+    </form>
+</body>
+</html>
+

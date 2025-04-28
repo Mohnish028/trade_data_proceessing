@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processed Trades</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin: 30px; }
+        table.data { margin: auto; border-collapse: collapse; width: 80%; }
+        table.data th, table.data td { border: 1px solid #ccc; padding: 10px; }
+        table.data th { background-color: #f2f2f2; }
+        a.button { margin-top: 20px; display: inline-block; background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; }
+        a.button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Processed Trade Data</h1>
+
+    {{ table|safe }}
+
+    <br><br>
+    <a href="/download" class="button" download>Download Excel File</a>
+</body>
+</html>
