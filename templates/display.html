@@ -47,8 +47,9 @@
             {% set symbol = row['Symbol'] %}
             <tr>
                 <td>{{ symbol }}</td>
-                <td contenteditable="true">{{ row['Realized P&L'] }}</td>
-                <td contenteditable="true">{{ row['Unrealized P&L'] }}</td>
+                <td>{{ row['Realized P&L'] }}</td>
+                <td>{{ row['Unrealized P&L'] }}</td>
+
                 <td class="total-cell">{{ row['Total P&L'] }}</td>
                 <td>
                     <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal_{{ loop.index }}">ℹ️</button>
