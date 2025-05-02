@@ -39,7 +39,10 @@
     <div class="container mt-4">
       <h2 class="mb-4">Processed Trade Summary</h2>
 
-    <table id="trade-table" class="data table table-bordered">
+    <div class="card shadow">
+      <div class="card-body table-responsive">
+        <table id="trade-table" class="table table-bordered table-hover">
+
         <thead>
             <tr>
                 <th>Symbol</th>
@@ -96,10 +99,17 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+        </table>
+      </div>
+    </div>
+
 
     <!-- Button to export updated data -->
-    <button type="button" class="button" onclick="downloadEditedExcel()">Download as Excel</button>
+    <div class="text-end mt-3">
+      <button type="button" class="btn btn-success" onclick="downloadEditedExcel()">
+        <i class="bi bi-download"></i> Download as Excel
+      </button>
+    </div>
 
     <!-- JS for Excel Export -->
     <script>
