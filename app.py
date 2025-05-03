@@ -47,6 +47,10 @@ def upload_file():
 
             file.seek(0)
             df = pd.read_excel(file, header=header_row)
+
+            # Remove sensitive fields before processing
+            sensitive_fields = ['Account Number', 'Client Name', 'Email', 'Phone']
+            df = df.drop(columns=[col for col in sensitive_fields if col in df.columns])
             df.columns = df.columns.str.strip()
 
             df['Base Symbol'] = df['Symbol'].apply(extract_base_symbol)
