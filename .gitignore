@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 processed_files/
+echo "trades.db" >> .gitignore
+

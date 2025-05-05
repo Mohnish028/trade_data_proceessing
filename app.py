@@ -7,8 +7,45 @@ import traceback
 import json
 from openpyxl import Workbook
 from openpyxl.styles import Font
+import sqlite3
+import os
+from datetime import datetime
 
 app = Flask(__name__)
+
+def init_db():
+    conn = sqlite3.connect("trades.db")
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS trade_summary (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            base_symbol TEXT,
+            realized REAL,
+            unrealized REAL,
+            total REAL,
+            date_uploaded TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+    print("Database initialized")
+
+init_db()
+
+def save_summary_to_db(summary_df):
+    conn = sqlite3.connect("trades.db")
+    c = conn.cursor()
+    date_uploaded = datetime.now().strftime('%Y-%m-%d')
+
+    for _, row in summary_df.iterrows():
+        c.execute('''
+            INSERT INTO trade_summary (base_symbol, realized, unrealized, total, date_uploaded)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (row['Symbol'], row['Realized P&L'], row['Unrealized P&L'], row['Total P&L'], date_uploaded))
+    
+    conn.commit()
+    conn.close()
+
 
 if not os.path.exists('processed_files'):
     os.makedirs('processed_files')
@@ -30,6 +67,7 @@ def find_header_row(df):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    init_db()
     if request.method == 'POST':
         if 'file' not in request.files or request.files['file'].filename == '':
             return render_template('error.html', message="No file uploaded. Please upload an Excel file.")
@@ -62,6 +100,10 @@ def upload_file():
 
             result['Total P&L'] = result['Realized P&L'] + result['Unrealized P&L']
             result.rename(columns={'Base Symbol': 'Symbol'}, inplace=True)
+            
+            save_summary_to_db(result)
+            print("Saved to DB:\n", result)
+
 
             breakdown_data = {}
             for base_symbol, group in df.groupby('Base Symbol'):
@@ -118,10 +160,19 @@ def save_changes():
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
 
+
     except Exception as e:
         print("Error in /save route:", e)
         return render_template('error.html', message="Failed to save changes.")
 
+@app.route('/history')
+def show_history():
+    conn = sqlite3.connect("trades.db")
+    df = pd.read_sql_query("SELECT * FROM trade_summary ORDER BY date_uploaded DESC", conn)
+    conn.close()
+    return render_template("display.html", tables=[df.to_html(classes='data')], titles=df.columns.values)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
