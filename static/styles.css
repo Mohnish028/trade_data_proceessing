@@ -1,0 +1,34 @@
+/* Profit & Loss coloring */
+td.pnl-positive {
+    color: green !important;
+    font-weight: bold;
+}
+td.pnl-negative {
+    color: red !important;
+    font-weight: bold;
+}
+td.pnl-zero {
+    color: gray !important;
+    font-weight: bold;
+}
+/* Table enhancements */
+table.dataTable {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+}
+table.dataTable thead th {
+    background-color: #f2f2f2;
+    padding: 10px;
+}
+table.dataTable tbody td {
+    padding: 8px;
+}
+table.dataTable tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Button improvements */
+.btn-outline-primary i {
+    vertical-align: middle;
+}
