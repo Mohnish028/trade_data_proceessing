@@ -32,10 +32,9 @@ def init_db():
 
 init_db()
 
-def save_summary_to_db(summary_df):
+def save_summary_to_db(summary_df,date_uploaded):
     conn = sqlite3.connect("trades.db")
     c = conn.cursor()
-    date_uploaded = datetime.now().strftime('%Y-%m-%d')
 
     for _, row in summary_df.iterrows():
         c.execute('''
@@ -64,6 +63,8 @@ def find_header_row(df):
         if all(col in row.values for col in required_columns):
             return index
     return None
+
+from datetime import datetime
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -101,7 +102,8 @@ def upload_file():
             result['Total P&L'] = result['Realized P&L'] + result['Unrealized P&L']
             result.rename(columns={'Base Symbol': 'Symbol'}, inplace=True)
             
-            save_summary_to_db(result)
+            date_uploaded = datetime.utcnow().strftime('%Y-%m-%d')  # Or .now() if local time preferred
+            save_summary_to_db(result, date_uploaded)
             print("Saved to DB:\n", result)
 
 
